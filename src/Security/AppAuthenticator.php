@@ -28,11 +28,11 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $yes = $request->getPayload()->getString('yes');
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $yes);
+        $email = $request->getPayload()->getString('email');
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
-            new UserBadge($yes),
+            new UserBadge($email),
             new PasswordCredentials($request->getPayload()->getString('password')),
             [
                 new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
@@ -47,8 +47,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // Redirige vers la route 'app_home' par défaut
-        return new RedirectResponse($this->urlGenerator->generate('app_home'));
+       return new RedirectResponse($this->urlGenerator->generate('app_product_index'));
     }
 
     protected function getLoginUrl(Request $request): string

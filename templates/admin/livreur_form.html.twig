@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nouveau livreur{% endblock %}
+{% block body %}
+<div style="max-width:400px;margin:2rem auto;font-family:sans-serif">
+    <h1>Nouveau livreur</h1>
+    <form method="post">
+        <div style="margin-bottom:1rem">
+            <label>Email<br>
+            <input type="email" name="email" required style="width:100%;padding:6px;box-sizing:border-box"></label>
+        </div>
+        <div style="margin-bottom:1rem">
+            <label>Mot de passe<br>
+            <input type="password" name="password" required minlength="6" style="width:100%;padding:6px;box-sizing:border-box"></label>
+        </div>
+        <button type="submit" style="background:#6a5acd;color:#fff;padding:8px 20px;border:none;border-radius:4px;cursor:pointer">Créer</button>
+        <a href="{{ path('admin_livreurs') }}" style="margin-left:1rem;color:#6a5acd">Annuler</a>
+    </form>
+</div>
+{% endblock %}

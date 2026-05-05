@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ product ? 'Modifier' : 'Nouveau' }} produit{% endblock %}
+{% block body %}
+<div style="max-width:500px;margin:2rem auto;font-family:sans-serif">
+    <h1>{{ product ? 'Modifier' : 'Nouveau' }} produit</h1>
+    <form method="post">
+        <div style="margin-bottom:1rem">
+            <label>Nom<br>
+            <input type="text" name="name" value="{{ product ? product.name : '' }}" required style="width:100%;padding:6px;box-sizing:border-box"></label>
+        </div>
+        <div style="margin-bottom:1rem">
+            <label>Catégorie<br>
+            <select name="category" style="width:100%;padding:6px">
+                <option value="Plat" {{ product and product.category == 'Plat' ? 'selected' }}>Plat</option>
+                <option value="Dessert" {{ product and product.category == 'Dessert' ? 'selected' }}>Dessert</option>
+                <option value="Boisson" {{ product and product.category == 'Boisson' ? 'selected' }}>Boisson</option>
+            </select></label>
+        </div>
+        <div style="margin-bottom:1rem">
+            <label>Prix (€)<br>
+            <input type="number" step="0.01" name="price" value="{{ product ? product.price : '' }}" required style="width:100%;padding:6px;box-sizing:border-box"></label>
+        </div>
+        <div style="margin-bottom:1rem">
+            <label>Stock<br>
+            <input type="number" name="stock" value="{{ product ? product.stock : 0 }}" style="width:100%;padding:6px;box-sizing:border-box"></label>
+        </div>
+        <div style="margin-bottom:1rem">
+            <label>Description<br>
+            <textarea name="description" style="width:100%;padding:6px;box-sizing:border-box">{{ product ? product.description : '' }}</textarea></label>
+        </div>
+        <button type="submit" style="background:#6a5acd;color:#fff;padding:8px 20px;border:none;border-radius:4px;cursor:pointer">Enregistrer</button>
+        <a href="{{ path('admin_products') }}" style="margin-left:1rem;color:#6a5acd">Annuler</a>
+    </form>
+</div>
+{% endblock %}

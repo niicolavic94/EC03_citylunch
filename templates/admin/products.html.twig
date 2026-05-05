@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block title %}Gestion des produits{% endblock %}
+{% block body %}
+<div style="max-width:900px;margin:2rem auto;font-family:sans-serif">
+    <h1>Produits</h1>
+    {% for msg in app.flashes('success') %}
+        <div style="background:#d4edda;padding:.75rem;border-radius:4px;margin-bottom:1rem">{{ msg }}</div>
+    {% endfor %}
+    <a href="{{ path('admin_product_new') }}" style="background:#6a5acd;color:#fff;padding:8px 16px;text-decoration:none;border-radius:4px">+ Nouveau produit</a>
+    <a href="{{ path('admin_livreurs') }}" style="margin-left:1rem;color:#6a5acd">Gérer les livreurs</a>
+    <table style="width:100%;border-collapse:collapse;margin-top:1.5rem">
+        <thead>
+            <tr style="background:#6a5acd;color:#fff">
+                <th style="padding:8px;text-align:left">Nom</th>
+                <th style="padding:8px">Catégorie</th>
+                <th style="padding:8px">Prix</th>
+                <th style="padding:8px">Stock</th>
+                <th style="padding:8px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr style="border-bottom:1px solid #ddd">
+                <td style="padding:8px">{{ product.name }}</td>
+                <td style="padding:8px;text-align:center">{{ product.category }}</td>
+                <td style="padding:8px;text-align:center">{{ product.price }} €</td>
+                <td style="padding:8px;text-align:center">{{ product.stock }}</td>
+                <td style="padding:8px;text-align:center">
+                    <a href="{{ path('admin_product_edit', {id: product.id}) }}" style="color:#6a5acd">Modifier</a>
+                    <form method="post" action="{{ path('admin_product_delete', {id: product.id}) }}" style="display:inline" onsubmit="return confirm('Supprimer ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete'~product.id) }}">
+                        <button type="submit" style="background:none;border:none;color:red;cursor:pointer">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5" style="padding:8px;text-align:center">Aucun produit.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

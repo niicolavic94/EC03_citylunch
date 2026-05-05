@@ -1,20 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CartController!{% endblock %}
+{% block title %}Liste des produits{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .products-container {
+            margin: 2rem auto;
+            max-width: 1200px;
+            width: 95%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f9f9f9; /* Blanc cassé */
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-title {
+            color: #6a5acd; /* Lavande */
+            margin-top: 0;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .btn-add-to-cart {
+            display: inline-block;
+            background: #6a5acd; /* Lavande */
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-add-to-cart:hover {
+            background: #7b68ee; /* Lavande plus clair */
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="products-container">
+        <h1 class="product-title">Nos produits</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <div class="products-grid">
+            {% for product in products %}
+                <div class="product-card">
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ product.description }}</p>
+                    <p class="product-price">{{ product.price }} €</p>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/nicor/Desktop/EC03_REDON/src/Controller/CartController.php</code></li>
-        <li>Your template at <code>C:/Users/nicor/Desktop/EC03_REDON/templates/cart/index.html.twig</code></li>
-    </ul>
-</div>
+                    <a href="{{ path('cart_add', {'id': product.id}) }}"
+                       class="btn-add-to-cart">
+                        🛒 Ajouter au panier
+                    </a>
+                </div>
+            {% else %}
+                <p>Aucun produit disponible pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

@@ -10,7 +10,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    private $hasher;
+    private UserPasswordHasherInterface $hasher;
 
     public function __construct(UserPasswordHasherInterface $hasher)
     {
@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
 
     
         $gerant = new User();
-        $gerant->setYes('gerant@citylunch.fr'); // ton champ s'appelle 'yes'
+        $gerant->setEmail('gerant@citylunch.fr');
         $gerant->setRoles(['ROLE_GERANT']);
         $gerant->setPassword($this->hasher->hashPassword($gerant, 'admin123'));
         $manager->persist($gerant);
@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
        
         for ($i = 1; $i <= 2; $i++) {
             $livreur = new User();
-            $livreur->setYes("livreur$i@citylunch.fr");
+            $livreur->setEmail("livreur$i@citylunch.fr");
             $livreur->setRoles(['ROLE_LIVREUR']);
             $livreur->setPassword($this->hasher->hashPassword($livreur, 'livreur123'));
             $manager->persist($livreur);

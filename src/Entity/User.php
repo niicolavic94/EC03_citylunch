@@ -9,8 +9,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_YES', fields: ['yes'])]
-#[UniqueEntity(fields: ['yes'], message: 'There is already an account with this yes')]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,7 +19,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    private ?string $yes = null;
+    private ?string $email = null;
 
     /**
      * @var list<string> The user roles
@@ -38,14 +38,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getYes(): ?string
+    public function getEmail(): ?string
     {
-        return $this->yes;
+        return $this->email;
     }
 
-    public function setYes(string $yes): static
+    public function setEmail(string $email): static
     {
-        $this->yes = $yes;
+        $this->email = $email;
 
         return $this;
     }
@@ -57,7 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->yes;
+        return (string) $this->email;
     }
 
     /**
