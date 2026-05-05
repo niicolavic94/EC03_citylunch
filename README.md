@@ -1,175 +1,124 @@
-# CityLunch — Application de commande de repas
 
-Application web développée avec **Symfony 7.4** permettant la gestion de produits, d'un panier et d'utilisateurs (gérant / livreur).
 
----
+# 🍽️ CityLunch — Application de commande de repas
 
-## Stack technique
-
-| Composant     | Technologie              |
-|---------------|--------------------------|
-| Backend       | PHP 8.2 + Symfony 7.4    |
-| Base de données | MySQL 8.0              |
-| Cache / Session | Redis 7                |
-| ORM           | Doctrine ORM 3           |
-| Frontend      | Twig + Asset Mapper      |
-| Conteneurs    | Docker + Docker Compose  |
+**Application web développée avec Symfony 7.4** permettant la gestion de produits, de paniers et d'utilisateurs (gérants, livreurs, clients).
+Ce projet s’inscrit dans le cadre de la formation **Bachelor Développeur Full Stack** en alternance.
 
 ---
 
-## Prérequis
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- PHP 8.2+
-- Composer
-- Symfony CLI (optionnel mais recommandé)
+## 🛠 Stack Technique & Composants
+   **Composant**         | **Technologie**                     |
+ |-----------------------|-------------------------------------|
+ | **Backend**           | PHP 8.2 + Symfony 7.4               |
+ | **Base de données**   | MySQL 8.0 (Données relationnelles) |
+ | **Cache / Session**   | Redis 7 (Performance & paniers)     |
+ | **ORM**               | Doctrine ORM 3                      |
+ | **Frontend**          | Twig + Asset Mapper (JS moderne)    |
+ | **Conteneurs**        | Docker + Docker Compose             |
+ | **Outils**            | Symfony CLI, Composer 2.6+          |
 
 ---
 
-## Installation
+## 📋 Prérequis
 
-### 1. Cloner le projet
+Pour exécuter ce projet localement, assurez-vous d’avoir installé :
+- **Docker Desktop** (version 20.10+)
+- **PHP 8.2+** (pour les commandes Symfony/Composer en local)
+- **Composer 2.6+**
+- **Symfony CLI** (recommandé pour le serveur local et TLS)
 
+---
+
+## 🚀 Initialisation du projet
+
+Pour démarrer rapidement, suivez ces étapes :
+
+### 1. Clonage et installation
 ```bash
-git clone <url-du-repo>
-cd EC03_REDON
-```
-
-### 2. Démarrer les conteneurs Docker
-
-```bash
-docker-compose up -d
-```
-
-Cela démarre :
-- `citylunch_db` — MySQL sur le port `3306`
-- `citylunch_redis` — Redis sur le port `6379`
-
-### 3. Installer les dépendances PHP
-
-```bash
+git clone https://github.com/niicolavic94/EC03_citylunch.git
+cd EC03_citylunch
 composer install
-```
 
-### 4. Configurer l'environnement
 
-Copier et adapter le fichier `.env` si nécessaire :
 
-```bash
+2. Configuration de l’environnement
+bash
+Copy
+
 cp .env .env.local
-```
 
-Les variables importantes :
 
-```dotenv
-DATABASE_URL="mysql://root:root@127.0.0.1:3306/citylunch?serverVersion=8.0.32&charset=utf8mb4"
-REDIS_URL=redis://127.0.0.1:6379
-APP_SECRET=c1ty1unch$ecretK3y2024!
-```
 
-### 5. Créer la base de données et exécuter les migrations
+⚠️ Vérifiez les variables suivantes dans .env.local :
 
-```bash
-php bin/console doctrine:database:create
-php bin/console doctrine:migrations:migrate
-```
+DATABASE_URL (ex: mysql://db_user:db_password@mysql:3306/citylunch?serverVersion=8.0)
+REDIS_URL (ex: redis://redis:6379)
+3. Lancement de l’infrastructure (Docker)
+bash
+Copy
 
-### 6. Charger les données de test (fixtures)
+docker-compose up -d
 
-```bash
-php bin/console doctrine:fixtures:load
-```
 
-Cela crée :
-- 1 compte gérant : `gerant@citylunch.fr` / `admin123`
-- 2 comptes livreur : `livreur1@citylunch.fr` / `livreur123`, `livreur2@citylunch.fr` / `livreur123`
-- 5 produits (plats + desserts)
 
-### 7. Lancer le serveur de développement
+4. Initialisation de la base de données
+bash
+Copy
 
-```bash
-symfony server:start
-# ou
-php -S localhost:8000 -t public/
-```
+php bin/console doctrine\:database\:create
+php bin/console doctrine\:migrations\:migrate --no-interaction
+php bin/console doctrine\:fixtures\:load --no-interaction
 
-L'application est accessible sur [http://localhost:8000](http://localhost:8000).
 
----
 
-## Structure du projet
+5. Démarrage du serveur Symfony
+bash
+Copy
 
-```
+symfony server\:start
+
+
+
+Accédez à l’application : http://localhost:8000
+
+💻 Configuration de l’IDE (Recommandations)
+Pour un développement optimal :
+
+PHPStorm :
+
+Installer les plugins Symfony Support et PHP Annotations.
+Configurer l’interpréteur distant via Docker.
+
+VS Code :
+
+Extensions recommandées : PHP Intelephense, Symfony Extension, Twig Language 2.
+
+Formatage : Le projet suit les normes PSR-12. Activez le Format on Save.
+
+🗄️ Architecture des données
+
+MySQL : Stockage persistant des données relationnelles (utilisateurs, commandes, produits).
+Redis : Gestion des sessions et du cache pour les paniers (réactivité accrue).
+
+🔐 Sécurité & SSL 
+
+Certificat : Utiliser Let’s Encrypt (gratuit et automatisé).
+Reverse-Proxy : Configurer Nginx ou Traefik pour la terminaison TLS (HTTPS → port 8000).
+Headers : Activer HSTS (Strict-Transport-Security) pour forcer HTTPS.
+
+📁 Structure du projet
+
+
 src/
-├── Controller/
-│   ├── CartController.php        # Gestion du panier (session)
-│   ├── ProductController.php     # Liste des produits (page d'accueil)
-│   ├── RegistrationController.php
-│   └── SecurityController.php   # Login / Logout
-├── Entity/
-│   ├── User.php                  # Utilisateur (gérant, livreur)
-│   ├── Product.php               # Produit (nom, prix, catégorie, stock)
-│   ├── Order.php / OrderLine.php
-│   ├── Customer.php
-│   ├── Stock.php / Movement.php
-├── Form/
-│   └── RegistrationFormType.php
-├── Security/
-│   └── AppAuthenticator.php     # Authentification par formulaire
-└── DataFixtures/
-    └── AppFixtures.php
-```
+├── Controller/       # Logique de routage (Cart, Product, Security, etc.)
+├── Entity/           # Modèles Doctrine (User, Product, Order, Stock...)
+├── Security/         # Authentification & AppAuthenticator
+├── Repository/       # Requêtes personnalisées
+├── Service/          # Logique métier (ex: gestion du panier)
+└── DataFixtures/     # Données de test (Admin: gerant@citylunch.fr / admin123)
 
----
 
-## Routes principales
 
-| Méthode | URL            | Nom de route         | Description              |
-|---------|----------------|----------------------|--------------------------|
-| GET     | `/`            | `app_product_index`  | Liste des produits       |
-| GET     | `/cart/add/{id}` | `cart_add`         | Ajouter un produit au panier |
-| GET/POST | `/login`      | `app_login`          | Connexion                |
-| GET     | `/logout`      | `app_logout`         | Déconnexion              |
-| GET/POST | `/register`   | `app_register`       | Inscription              |
 
----
-
-## Rôles utilisateurs
-
-| Rôle           | Description                        |
-|----------------|------------------------------------|
-| `ROLE_USER`    | Attribué à tous les utilisateurs   |
-| `ROLE_GERANT`  | Gérant de l'établissement          |
-| `ROLE_LIVREUR` | Livreur                            |
-
----
-
-## Commandes utiles
-
-```bash
-# Vider le cache
-php bin/console cache:clear
-
-# Créer une migration après modification d'une entité
-php bin/console make:migration
-
-# Appliquer les migrations
-php bin/console doctrine:migrations:migrate
-
-# Recharger les fixtures (supprime les données existantes)
-php bin/console doctrine:fixtures:load --no-interaction
-
-# Lancer les tests
-php bin/phpunit
-```
-
----
-
-## Corrections apportées
-
-- `ProductController` : remplacement de `getDoctrine()` (déprécié) par injection de `EntityManagerInterface`
-- `CartController` : ajout du tag `<?php` manquant
-- `doctrine.yaml` : correction de la plateforme (`PostgreSQLPlatform` → `MySQLPlatform`)
-- `.env` : renseignement de `APP_SECRET` (requis pour les sessions et tokens CSRF)
-- `docker-compose.yml` : suppression du service `database` PostgreSQL en doublon (généré par doctrine-bundle)
-- `AppFixtures.php` : typage explicite de la propriété `$hasher`
+🔗 Lien du dépôt:  https://github.com/niicolavic94/EC03_citylunch
