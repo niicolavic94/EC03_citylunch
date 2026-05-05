@@ -1,4 +1,15 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
+
+framework:
+    session:
+        
+        handler_id: 'Redis' 
+        cookie_secure: auto
+        cookie_samesite: lax
+        storage_factory_id: session.storage.factory.native
+
+
+
 framework:
     secret: '%env(APP_SECRET)%'
 
@@ -13,3 +24,5 @@ when@test:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
+
+
