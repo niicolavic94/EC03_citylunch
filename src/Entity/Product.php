@@ -23,8 +23,11 @@ class Product
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)] // On le met en nullable au cas où pour les fixtures
     private ?int $stock = null;
+
+    #[ORM\Column(length: 100)] // Ajout de la colonne en base de données
+    private ?string $category = null;
 
     public function getId(): ?int
     {
@@ -39,7 +42,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -51,7 +53,6 @@ class Product
     public function setPrice(float $price): static
     {
         $this->price = $price;
-
         return $this;
     }
 
@@ -63,7 +64,6 @@ class Product
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -72,10 +72,20 @@ class Product
         return $this->stock;
     }
 
-    public function setStock(int $stock): static
+    public function setStock(?int $stock): static
     {
         $this->stock = $stock;
+        return $this;
+    }
 
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): static
+    {
+        $this->category = $category;
         return $this;
     }
 }
